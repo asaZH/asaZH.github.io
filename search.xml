@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>seata</title>
+      <link href="archives/12716.html"/>
+      <url>archives/12716.html</url>
+      
+        <content type="html"><![CDATA[<h1 id="Seata"><a href="#Seata" class="headerlink" title="Seata"></a>Seata</h1><p>spring-cloud-alibaba-seata 是阿里的一款开源的分布式事务框架；</p><p><a href="https://seata.io/zh-cn/docs/overview/what-is-seata.html">官方文档</a></p><p>一、 seata提供的事务模式有 AT，TCC, SAGA, XA</p><ul><li><strong>TA 模式</strong> TA Seata 在第一阶段会拦截业务sql，并解析，找到需要更新的业务数据，在业务数据更新前保存旧数据快照，保存更新后数据快照，并生成行锁；Seata 在第二阶段提交时，因为第一阶段sql已经提交到数据库，这时seata只需要删除快照数据 和行锁就完成事务提交； seata 在第二阶段回滚时，Seata需要还原业务数据，回滚方式就是用旧快照数据还原，在还原之前 需要用新快照数据进行脏写校验，对比数据库当前数据，如果一致就没有脏写，还原业务数据，不一致就出现脏写，需要人工处理。</li><li><strong>TCC模式</strong> TCC模式需要用户自己实现 资源检测预留，执行业务操作， 预留资源的释放； 例子： 100 块转账 20 块，在发起转账时，需要进行资源预留，20块被冻结，当二段提交进行真正的扣钱时，一阶段冻结的 20块钱扣除 余额变为 80； 当二阶段回滚时，需要解除冻结；</li><li><strong>SAGA模式</strong> SAGA模式是一种补偿模式，需要实现业务的逆向补偿逻辑，在回滚时调用</li><li><strong>XA模式</strong> XA模式是一种两阶段提交协议，XA模式下需要一个全局协调器，每个数据库事务完成后进行第一阶段预提交，并通知协调器，把结果给协调器。协调器等所有分支事务操作完成，都预提交后，进行第二步，协调器通知每个数据进行 commit 或者rollback。 这个协调器就是XA模式中TM（transaction manage）。</li><li><strong>总结</strong></li></ul><ol><li>AT 模式是无侵入的分布式事务解决方案，适用于不希望对业务进行改造的场景，几乎0学习成本。</li><li>TCC 模式是高性能分布式事务解决方案，适用于核心系统等对性能有很高要求的场景。</li><li>Saga 模式是长事务解决方案，适用于业务流程长且需要保证事务最终一致性的业务系统，Saga 模式一阶段就会提交本地事务，无锁，长流程情况下可以保证性能，多用于渠道层、集成层业务系统。事务参与者可能是其它公司的服务或者是遗留系统的服务，无法进行改造和提供 TCC 要求的接口，也可以使用 Saga 模式。</li><li>XA模式是分布式强一致性的解决方案，但性能低而使用较少，事务粒度大。高并发下，系统可用性低。因此很少使用</li></ol><hr><p>二、 seata 的三个基本组件</p><ul><li>事务协调器（TC）： 维持全局事务和分支事务的状态，驱动全局提交或回滚</li><li>事务管理器（TM） ： 定义全局事务的范围：开始全局事务，提交或回滚全局事务</li><li>资源管理器（RM）：管理分支事务正在处理的资源，与TC进行对话以注册分支事务并报告分支事务的状态，并驱动分支事务的提交或回滚。</li></ul><p>三、seata 处理全局事务的流程</p><ol><li>TM向TC请求发起一个全局事务，TC返回一个代表这个全局事务的XID。</li><li>XID在rpc中传播给每一个调用链中的服务。</li><li>每个RM拿到XID后向TC发起一个分支事务，TC返回一个代表这个分支事务的XID。</li><li>RM完成本地分支的业务，提交本地分支，并且报告给TC。</li><li>全局事务调用链处理完毕，TM根据有无异常向TC发起全局事务的提交或者回滚。</li></ol><p>回滚：</p><ol><li>假设某个RM本地事务失败。该RM自身驱动本地事务回滚，并且报告给TC。</li><li>TM检测到了某个分支事务失败，向TC发起全局事务回滚。</li><li>TC给每一个RM发送消息，通知它们全部回滚。</li><li>TC将全局事务回滚的结果发送给TM。 全局事务结束。</li></ol><hr><h1 id="EasyTransaction"><a href="#EasyTransaction" class="headerlink" title="EasyTransaction"></a>EasyTransaction</h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 学习 </tag>
+            
+            <tag> 框架 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="archives/16107.html"/>
+      <url>archives/16107.html</url>
+      
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+  
+  
+</search>
